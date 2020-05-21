@@ -1,8 +1,11 @@
 # Rate_Calculations
 
 Data is stored on LPC machine at:
+  
   Data: /uscms/home/menendez/nobackup/Trigger/CMSSW_10_6_4/src/Data/TPEHists_Data.root
+  
   Signal MC: /uscms/home/menendez/nobackup/Trigger/CMSSW_10_6_4/src/Data/TPEHists_LLP.root
+  
   Neutrino Gun MC: /uscms/home/menendez/nobackup/Trigger/CMSSW_10_6_4/src/Data/TPEHists_Neutrino_gun.root
   
 Define thresholds in Count.py on lines 57 and 58
