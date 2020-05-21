@@ -11,11 +11,11 @@ MC = False
 Neutrino = True
 
 if MC:
-  File = TFile("Data/TPEHists_LLP.root","READ")
+  File = TFile("/uscms/home/menendez/nobackup/Trigger/CMSSW_10_6_4/src/Data/TPEHists_LLP.root","READ")
 elif Neutrino:
-  File = TFile("Data/TPEHists_Neutrino_gun.root","READ")
+  File = TFile("/uscms/home/menendez/nobackup/Trigger/CMSSW_10_6_4/src/Data/TPEHists_Neutrino_gun.root","READ")
 else:
-  File = TFile("Data/TPEHists_Data.root","READ")
+  File = TFile("/uscms/home/menendez/nobackup/Trigger/CMSSW_10_6_4/src/Data/TPEHists_Data.root","READ")
 clct = File.Get("lctreader/Ev_clcttree")
 alct = File.Get("lctreader/Ev_alcttree")
 llp = File.Get("lctreader/llp")
