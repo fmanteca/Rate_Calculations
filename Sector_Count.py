@@ -6,7 +6,12 @@ from tqdm import tqdm
 tqdm_disable = False
 ROOT.gErrorIgnoreLevel = kWarning;
 
-File = TFile("Data/TPEHists_2.root","READ")
+MC = True
+
+if MC:
+  File = TFile("Data/TPEHists_LLP.root","READ")
+else:
+  File = TFile("Data/TPEHists_Data.root","READ")
 clct = File.Get("lctreader/Ev_clcttree")
 alct = File.Get("lctreader/Ev_alcttree")
 
@@ -117,10 +122,14 @@ for i in tqdm(range(0, nEntries_alct),disable=tqdm_disable):
       if(alct.t_nWire > threshold_nWire[alct.t_ring-1][alct.t_station]):
         sector_count_w[alct.t_sector]+=1   
  
-
-for j in range(1,len(sector_nComp)):
-  sector_rate_c[j] = Ev_sector_count_c[j]/numEventsclct*30.0*1000.0
-  sector_rate_w[j] = Ev_sector_count_w[j]/numEventsalct*30.0*1000.0
+if MC:
+  for j in range(1,len(sector_nComp)):
+    sector_rate_c[j] = Ev_sector_count_c[j]/numEventsclct*100.0#*30.0*1000.0
+    sector_rate_w[j] = Ev_sector_count_w[j]/numEventsalct*100.0#*30.0*1000.0
+else:
+  for j in range(1,len(sector_nComp)):
+    sector_rate_c[j] = Ev_sector_count_c[j]/numEventsclct*30.0*1000.0
+    sector_rate_w[j] = Ev_sector_count_w[j]/numEventsalct*30.0*1000.0
 
 File.Close()
 
@@ -132,9 +141,17 @@ for i in tqdm(range(len(hists))):
   hists[i].Draw()
   c1.SaveAs("plots/sector_hist"+str(i)+".png")
 
-print "========================== Comparator Rates by Sector =========================="
-for j in range(1,len(sector_nComp)):
-  print "In", int(numEventsclct), "events, there are", int(Ev_sector_count_c[j]), "events where Sector", j, "has >", threshold_chamber, "chambers with >", threshold_nComp[0][1], "in ME1/1, >", threshold_nComp[1][1], "in ME1/2, >", threshold_nComp[0][2], "in ME2/1, >", threshold_nComp[1][2], "in ME2/2, >", threshold_nComp[0][3], "in ME3/1, >", threshold_nComp[1][3], "in ME3/2, >", threshold_nComp[0][4], "in ME4/1, >", threshold_nComp[1][4], "in ME4/1. Rate =", sector_rate_c[j], "KHz"
-print "============================= Wire Rates by Sector ============================="
-for j in range(1,len(sector_nWire)):
-  print "In", int(numEventsalct), "events, there are", int(Ev_sector_count_w[j]), "events where Sector", j, "has >", threshold_chamber, "chambers with >", threshold_nWire[0][1], "in ME1/1, >", threshold_nWire[1][1], "in ME1/2, >", threshold_nWire[0][2], "in ME2/1, >", threshold_nWire[1][2], "in ME2/2, >", threshold_nWire[0][3], "in ME3/1, >", threshold_nWire[1][3], "in ME3/2, >", threshold_nWire[0][4], "in ME4/1, >", threshold_nWire[1][4], "in ME4/1. Rate =", sector_rate_w[j], "KHz"
+if MC:
+  print "========================== Comparator Rates by Sector =========================="
+  for j in range(1,len(sector_nComp)):
+    print "In", int(numEventsclct), "events, there are", int(Ev_sector_count_c[j]), "events where Sector", j, "has >", threshold_chamber, "chambers with >", threshold_nComp[0][1], "in ME1/1, >", threshold_nComp[1][1], "in ME1/2, >", threshold_nComp[0][2], "in ME2/1, >", threshold_nComp[1][2], "in ME2/2, >", threshold_nComp[0][3], "in ME3/1, >", threshold_nComp[1][3], "in ME3/2, >", threshold_nComp[0][4], "in ME4/1, >", threshold_nComp[1][4], "in ME4/1. Efficiency =", sector_rate_c[j], "%" #Rate =", sector_rate_c[j], "KHz"
+  print "============================= Wire Rates by Sector ============================="
+  for j in range(1,len(sector_nWire)):
+    print "In", int(numEventsalct), "events, there are", int(Ev_sector_count_w[j]), "events where Sector", j, "has >", threshold_chamber, "chambers with >", threshold_nWire[0][1], "in ME1/1, >", threshold_nWire[1][1], "in ME1/2, >", threshold_nWire[0][2], "in ME2/1, >", threshold_nWire[1][2], "in ME2/2, >", threshold_nWire[0][3], "in ME3/1, >", threshold_nWire[1][3], "in ME3/2, >", threshold_nWire[0][4], "in ME4/1, >", threshold_nWire[1][4], "in ME4/1. Efficiency =", sector_rate_w[j], "%" #Rate =", sector_rate_w[j], "KHz"
+else:
+  print "========================== Comparator Rates by Sector =========================="
+  for j in range(1,len(sector_nComp)):
+    print "In", int(numEventsclct), "events, there are", int(Ev_sector_count_c[j]), "events where Sector", j, "has >", threshold_chamber, "chambers with >", threshold_nComp[0][1], "in ME1/1, >", threshold_nComp[1][1], "in ME1/2, >", threshold_nComp[0][2], "in ME2/1, >", threshold_nComp[1][2], "in ME2/2, >", threshold_nComp[0][3], "in ME3/1, >", threshold_nComp[1][3], "in ME3/2, >", threshold_nComp[0][4], "in ME4/1, >", threshold_nComp[1][4], "in ME4/1. Rate =", sector_rate_c[j], "KHz"
+  print "============================= Wire Rates by Sector ============================="
+  for j in range(1,len(sector_nWire)):
+    print "In", int(numEventsalct), "events, there are", int(Ev_sector_count_w[j]), "events where Sector", j, "has >", threshold_chamber, "chambers with >", threshold_nWire[0][1], "in ME1/1, >", threshold_nWire[1][1], "in ME1/2, >", threshold_nWire[0][2], "in ME2/1, >", threshold_nWire[1][2], "in ME2/2, >", threshold_nWire[0][3], "in ME3/1, >", threshold_nWire[1][3], "in ME3/2, >", threshold_nWire[0][4], "in ME4/1, >", threshold_nWire[1][4], "in ME4/1. Rate =", sector_rate_w[j], "KHz"
