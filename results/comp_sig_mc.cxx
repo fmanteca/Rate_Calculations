@@ -3,6 +3,8 @@
 #include "TRandom.h"
 #include <vector>
 #include <iostream>
+#include "tdrstyle.C"
+#include "CMS_lumi.C"
 
 void comp_sig_mc()
 {
@@ -10,8 +12,8 @@ void comp_sig_mc()
   std::vector<TH1D*> histssg;
   std::vector<TH1D*> histsmc;
 
-  TFile *fsg = new TFile("Event_tree_Data.root");
-  TFile *fmc = new TFile("Event_tree_MC.root");
+  TFile *fsg = new TFile("Event_tree_Neutrino.root");
+  TFile *fmc = new TFile("Event_tree_HTo2LongLivedTo4b_MH-125_MFF-50_CTau-3000mm_TuneCP5_14TeV_pythia8.root");
 
   TH1D *Ev_max_nComp_sg, *Ev_max_nWire_sg, 
        *Ev_max_nComp_ME1_sg, *Ev_max_nComp_ME2_sg, *Ev_max_nComp_ME3_sg, *Ev_max_nComp_ME4_sg,
@@ -28,6 +30,11 @@ void comp_sig_mc()
   c1->SetRightMargin(0.09);
   c1->SetLeftMargin(0.15);
   c1->SetBottomMargin(0.15);
+
+  //gROOT->LoadMacro("tdrstyle.C");
+  //setTDRStyle();
+
+  //gROOT->LoadMacro("CMS_lumi.C");
 
   Ev_max_nComp_sg = (TH1D*)fsg->Get("Ev_max_nComp"); histssg.push_back(Ev_max_nComp_sg);
   Ev_max_nComp_mc = (TH1D*)fmc->Get("Ev_max_nComp"); histsmc.push_back(Ev_max_nComp_mc);
@@ -83,8 +90,8 @@ void comp_sig_mc()
   Ev_max_nWire_ME42_mc = (TH1D*)fmc->Get("Ev_max_nWire_ME42"); histsmc.push_back(Ev_max_nWire_ME42_mc);
 
   TLegend * legend = new TLegend(0.7,0.65,1,.75);
-  legend->AddEntry(histssg[0],"Zerobias Data","lep");
-  legend->AddEntry(histsmc[0],"Signal MC","lep");
+  legend->AddEntry(histssg[0],"Neutrino Gun MC","lep");
+  legend->AddEntry(histsmc[0],"HTo2LongLivedTo4b_MH-125_MFF-50_CTau-3000mm_TuneCP5_14TeV_pythia8","lep");
   legend->Draw();
 
   c1->Print("DatavsSignal.pdf[");

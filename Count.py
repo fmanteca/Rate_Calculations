@@ -1,17 +1,28 @@
+print("Input dataset name:")
+dataset = raw_input()
+
 import os, sys
 import ROOT
 from ROOT import TH1F,TH2F,TFile,TTree,TCanvas, TProfile, TNtuple, gErrorIgnoreLevel, kInfo, kWarning
 from tqdm import tqdm
-
-
 tqdm_disable = False
 ROOT.gErrorIgnoreLevel = kWarning;
 
-MC = False
-Neutrino = True
+in_path = "/uscms/home/menendez/nobackup/Trigger/CMSSW_10_6_4/src/Data/TPEHists_" + dataset + ".root"
+out_path = "results/Event_tree_" + dataset + ".root"
+
+if dataset=="Data":
+  MC = False
+  Neutrino = False
+elif dataset=="Neutrino_gun" or dataset=="Nu_E10-pythia8-gun":
+  MC = False
+  Neutrino = True
+else:
+  MC = True
+  Neutrino = False
 
 if MC:
-  File = TFile("/uscms/home/menendez/nobackup/Trigger/CMSSW_10_6_4/src/Data/TPEHists_LLP.root","READ")
+  File = TFile(in_path,"READ")
 elif Neutrino:
   File = TFile("/uscms/home/menendez/nobackup/Trigger/CMSSW_10_6_4/src/Data/TPEHists_Neutrino_gun.root","READ")
 else:
@@ -22,7 +33,8 @@ llp = File.Get("lctreader/llp")
 
 nEntries_clct = clct.GetEntries()
 nEntries_alct = alct.GetEntries()
-nEntries_llp = llp.GetEntries()
+if MC:
+  nEntries_llp = llp.GetEntries()
 
 llp_accept = []
 
@@ -54,16 +66,16 @@ sector_count_w = [[ [0.0 for col in range(5)] for col in range(2)] for row in ra
 Ev_sector_count_c = [[0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0]]
 Ev_sector_count_w = [[0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0]]
 
-threshold_nComp = [[0,70,50,45,45],[0,60,40,30,30]]
-threshold_nWire = [[0,90,90,90,90],[0,80,80,80,80]]
-threshold_chamber = 0
+threshold_nComp = [[0,70,50,45,45],[0,60,40,30,30]] #e.g. [[0,ME1/1,ME2/1,ME3/1,ME4/1],[0,ME1/2,ME2/2,ME3/2,ME4/2]]
+threshold_nWire = [[0,90,90,90,90],[0,80,80,80,80]] #e.g. [[0,ME1/1,ME2/1,ME3/1,ME4/1],[0,ME1/2,ME2/2,ME3/2,ME4/2]]
+threshold_chamber = 0 # > 0 chambers pass
 
 station_rate_c = [0.0,0.0,0.0,0.0,0.0]
 station_rate_w = [0.0,0.0,0.0,0.0,0.0]
 sector_rate_c = [[0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0]]
 sector_rate_w = [[0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0]]
 
-X = 90
+X = 90 #General Threshold
 
 hists = []
 Ev_max_nComp = TH1F("Ev_max_nComp","Max nComp per Event", 150, -.5, 149.5); hists.append(Ev_max_nComp)
@@ -204,6 +216,8 @@ for i in tqdm(range(0, nEntries_clct),disable=tqdm_disable):
             if(clct.t_nComp > threshold_nComp[clct.t_ring-1][clct.t_station]):
               sector_count_c[k][clct.t_ring-1][clct.t_station]+=1
 
+event_list = open("Large_Event_List.txt","w")
+event_list.write("These events have > 70 wire digis in a single chamber:\n")
 print "Starting ALCT Analysis"
 for i in tqdm(range(0, nEntries_alct),disable=tqdm_disable):
   alct.GetEntry(i)
@@ -230,6 +244,9 @@ for i in tqdm(range(0, nEntries_alct),disable=tqdm_disable):
         alreadyfilled=False
     station_count_w = [0.0,0.0,0.0,0.0,0.0]
     sector_count_w = [[ [0.0 for col in range(5)] for col in range(2)] for row in range(6)]
+
+    if(max_nWire > 70):
+      event_list.write("Run: %s, Event: %s, Max Wire Digis: %s \n" % (alct.t_RUN, alct.t_Event,max_nWire))
 
     #Fill Histogram with max nWire of event
     Ev_max_nWire.Fill(max_nWire)
@@ -282,6 +299,7 @@ for i in tqdm(range(0, nEntries_alct),disable=tqdm_disable):
               sector_nWire[alct.t_station][alct.t_ring-1] = alct.t_nWire
             if(alct.t_nWire > threshold_nWire[alct.t_ring-1][alct.t_station]):
               sector_count_w[k][alct.t_ring-1][alct.t_station]+=1
+event_list.close()
  
 if MC:
   rate_c = Ev_count_c/numEventsclct*100.0#*30.0*1000.0
@@ -317,7 +335,7 @@ else:
 File.Close()
 
 if MC:
-  save_file = TFile("results/Event_tree_MC.root","RECREATE")
+  save_file = TFile(out_path,"RECREATE")
 elif Neutrino:
   save_file = TFile("results/Event_tree_Neutrino.root","RECREATE")
 else: 
@@ -330,6 +348,7 @@ for i in tqdm(range(len(hists))):
   #c1.SaveAs("plots/hist"+str(i)+".png")
 
 if MC:
+  print "Sample:" + dataset
   print "========================== Results =========================="
   print "In", int(numEventsclct), "events,", int(Ev_count_c), "events had >", X, "Comparator Digis in a single chamber. Efficiency =", rate_c, "%"#Rate =", rate_c, "KHz"
   print "In", int(numEventsalct), "events,", int(Ev_count_w), "events had >", X, "Wire Digis in a single chamber.       Efficiency =", rate_w, "%"#Rate =", rate_w, "KHz"
@@ -352,6 +371,7 @@ if MC:
     for k in range(2):
       print "In", int(numEventsalct), "events, there are", int(Ev_sector_count_w[k][j]), "events where at least 1 Sector in ME", j, "/", k+1, "has >=", threshold_chamber+1, "chambers with >", threshold_nWire[k][j], "Wire Digis in a single chamber. Efficiency=", sector_rate_w[k][j], "%"#Rate =", sector_rate_w[k][j], "KHz"
 else:
+  print "Sample:" + dataset
   print "========================== Results =========================="
   print "In", int(numEventsclct), "events,", int(Ev_count_c), "events had >", X, "Comparator Digis in a single chamber. Rate =", rate_c, "KHz" 
   print "In", int(numEventsalct), "events,", int(Ev_count_w), "events had >", X, "Wire Digis in a single chamber.       Rate =", rate_w, "KHz"
