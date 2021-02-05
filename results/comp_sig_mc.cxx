@@ -18,13 +18,13 @@ void comp_sig_mc()
   TH1D *Ev_max_nComp_sg, *Ev_max_nWire_sg, 
        *Ev_max_nComp_ME1_sg, *Ev_max_nComp_ME2_sg, *Ev_max_nComp_ME3_sg, *Ev_max_nComp_ME4_sg,
        *Ev_max_nWire_ME1_sg, *Ev_max_nWire_ME2_sg, *Ev_max_nWire_ME3_sg, *Ev_max_nWire_ME4_sg,
-       *Ev_max_nComp_ME11_sg, *Ev_max_nComp_ME12_sg, *Ev_max_nComp_ME21_sg, *Ev_max_nComp_ME22_sg, *Ev_max_nComp_ME31_sg, *Ev_max_nComp_ME32_sg, *Ev_max_nComp_ME41_sg, *Ev_max_nComp_ME42_sg,
-       *Ev_max_nWire_ME11_sg, *Ev_max_nWire_ME12_sg, *Ev_max_nWire_ME21_sg, *Ev_max_nWire_ME22_sg, *Ev_max_nWire_ME31_sg, *Ev_max_nWire_ME32_sg, *Ev_max_nWire_ME41_sg, *Ev_max_nWire_ME42_sg,
+       *Ev_max_nComp_ME11_sg, *Ev_max_nComp_ME12_sg, *Ev_max_nComp_ME13_sg, *Ev_max_nComp_ME21_sg, *Ev_max_nComp_ME22_sg, *Ev_max_nComp_ME31_sg, *Ev_max_nComp_ME32_sg, *Ev_max_nComp_ME41_sg, *Ev_max_nComp_ME42_sg,
+       *Ev_max_nWire_ME11_sg, *Ev_max_nWire_ME12_sg, *Ev_max_nWire_ME13_sg, *Ev_max_nWire_ME21_sg, *Ev_max_nWire_ME22_sg, *Ev_max_nWire_ME31_sg, *Ev_max_nWire_ME32_sg, *Ev_max_nWire_ME41_sg, *Ev_max_nWire_ME42_sg,
        *Ev_max_nComp_mc, *Ev_max_nWire_mc,
        *Ev_max_nComp_ME1_mc, *Ev_max_nComp_ME2_mc, *Ev_max_nComp_ME3_mc, *Ev_max_nComp_ME4_mc,
        *Ev_max_nWire_ME1_mc, *Ev_max_nWire_ME2_mc, *Ev_max_nWire_ME3_mc, *Ev_max_nWire_ME4_mc,
-       *Ev_max_nComp_ME11_mc, *Ev_max_nComp_ME12_mc, *Ev_max_nComp_ME21_mc, *Ev_max_nComp_ME22_mc, *Ev_max_nComp_ME31_mc, *Ev_max_nComp_ME32_mc, *Ev_max_nComp_ME41_mc, *Ev_max_nComp_ME42_mc,
-       *Ev_max_nWire_ME11_mc, *Ev_max_nWire_ME12_mc, *Ev_max_nWire_ME21_mc, *Ev_max_nWire_ME22_mc, *Ev_max_nWire_ME31_mc, *Ev_max_nWire_ME32_mc, *Ev_max_nWire_ME41_mc, *Ev_max_nWire_ME42_mc;
+       *Ev_max_nComp_ME11_mc, *Ev_max_nComp_ME12_mc, *Ev_max_nComp_ME13_mc, *Ev_max_nComp_ME21_mc, *Ev_max_nComp_ME22_mc, *Ev_max_nComp_ME31_mc, *Ev_max_nComp_ME32_mc, *Ev_max_nComp_ME41_mc, *Ev_max_nComp_ME42_mc,
+       *Ev_max_nWire_ME11_mc, *Ev_max_nWire_ME12_mc, *Ev_max_nWire_ME13_mc, *Ev_max_nWire_ME21_mc, *Ev_max_nWire_ME22_mc, *Ev_max_nWire_ME31_mc, *Ev_max_nWire_ME32_mc, *Ev_max_nWire_ME41_mc, *Ev_max_nWire_ME42_mc;
       
   TCanvas *c1 = new TCanvas("c1","c1",900,700);
   c1->SetRightMargin(0.09);
@@ -36,30 +36,32 @@ void comp_sig_mc()
 
   //gROOT->LoadMacro("CMS_lumi.C");
 
-  Ev_max_nComp_sg = (TH1D*)fsg->Get("Ev_max_nComp"); histssg.push_back(Ev_max_nComp_sg);
-  Ev_max_nComp_mc = (TH1D*)fmc->Get("Ev_max_nComp"); histsmc.push_back(Ev_max_nComp_mc);
-  Ev_max_nWire_sg = (TH1D*)fsg->Get("Ev_max_nWire"); histssg.push_back(Ev_max_nWire_sg);
-  Ev_max_nWire_mc = (TH1D*)fmc->Get("Ev_max_nWire"); histsmc.push_back(Ev_max_nWire_mc);
-  Ev_max_nComp_ME1_sg = (TH1D*)fsg->Get("Ev_max_nComp_ME1"); histssg.push_back(Ev_max_nComp_ME1_sg);
-  Ev_max_nComp_ME1_mc = (TH1D*)fmc->Get("Ev_max_nComp_ME1"); histsmc.push_back(Ev_max_nComp_ME1_mc);
-  Ev_max_nComp_ME2_sg = (TH1D*)fsg->Get("Ev_max_nComp_ME2"); histssg.push_back(Ev_max_nComp_ME2_sg);
-  Ev_max_nComp_ME2_mc = (TH1D*)fmc->Get("Ev_max_nComp_ME2"); histsmc.push_back(Ev_max_nComp_ME2_mc);
-  Ev_max_nComp_ME3_sg = (TH1D*)fsg->Get("Ev_max_nComp_ME3"); histssg.push_back(Ev_max_nComp_ME3_sg);
-  Ev_max_nComp_ME3_mc = (TH1D*)fmc->Get("Ev_max_nComp_ME3"); histsmc.push_back(Ev_max_nComp_ME3_mc);
-  Ev_max_nComp_ME4_sg = (TH1D*)fsg->Get("Ev_max_nComp_ME4"); histssg.push_back(Ev_max_nComp_ME4_sg);
-  Ev_max_nComp_ME4_mc = (TH1D*)fmc->Get("Ev_max_nComp_ME4"); histsmc.push_back(Ev_max_nComp_ME4_mc); 
-  Ev_max_nWire_ME1_sg = (TH1D*)fsg->Get("Ev_max_nWire_ME1"); histssg.push_back(Ev_max_nWire_ME1_sg);
-  Ev_max_nWire_ME1_mc = (TH1D*)fmc->Get("Ev_max_nWire_ME1"); histsmc.push_back(Ev_max_nWire_ME1_mc);
-  Ev_max_nWire_ME2_sg = (TH1D*)fsg->Get("Ev_max_nWire_ME2"); histssg.push_back(Ev_max_nWire_ME2_sg);
-  Ev_max_nWire_ME2_mc = (TH1D*)fmc->Get("Ev_max_nWire_ME2"); histsmc.push_back(Ev_max_nWire_ME2_mc);
-  Ev_max_nWire_ME3_sg = (TH1D*)fsg->Get("Ev_max_nWire_ME3"); histssg.push_back(Ev_max_nWire_ME3_sg);
-  Ev_max_nWire_ME3_mc = (TH1D*)fmc->Get("Ev_max_nWire_ME3"); histsmc.push_back(Ev_max_nWire_ME3_mc);
-  Ev_max_nWire_ME4_sg = (TH1D*)fsg->Get("Ev_max_nWire_ME4"); histssg.push_back(Ev_max_nWire_ME4_sg);
-  Ev_max_nWire_ME4_mc = (TH1D*)fmc->Get("Ev_max_nWire_ME4"); histsmc.push_back(Ev_max_nWire_ME4_mc);
+  //Ev_max_nComp_sg = (TH1D*)fsg->Get("Ev_max_nComp"); histssg.push_back(Ev_max_nComp_sg);
+  //Ev_max_nComp_mc = (TH1D*)fmc->Get("Ev_max_nComp"); histsmc.push_back(Ev_max_nComp_mc);
+  //Ev_max_nWire_sg = (TH1D*)fsg->Get("Ev_max_nWire"); histssg.push_back(Ev_max_nWire_sg);
+  //Ev_max_nWire_mc = (TH1D*)fmc->Get("Ev_max_nWire"); histsmc.push_back(Ev_max_nWire_mc);
+  //Ev_max_nComp_ME1_sg = (TH1D*)fsg->Get("Ev_max_nComp_ME1"); histssg.push_back(Ev_max_nComp_ME1_sg);
+  //Ev_max_nComp_ME1_mc = (TH1D*)fmc->Get("Ev_max_nComp_ME1"); histsmc.push_back(Ev_max_nComp_ME1_mc);
+  //Ev_max_nComp_ME2_sg = (TH1D*)fsg->Get("Ev_max_nComp_ME2"); histssg.push_back(Ev_max_nComp_ME2_sg);
+  //Ev_max_nComp_ME2_mc = (TH1D*)fmc->Get("Ev_max_nComp_ME2"); histsmc.push_back(Ev_max_nComp_ME2_mc);
+  //Ev_max_nComp_ME3_sg = (TH1D*)fsg->Get("Ev_max_nComp_ME3"); histssg.push_back(Ev_max_nComp_ME3_sg);
+  //Ev_max_nComp_ME3_mc = (TH1D*)fmc->Get("Ev_max_nComp_ME3"); histsmc.push_back(Ev_max_nComp_ME3_mc);
+  //Ev_max_nComp_ME4_sg = (TH1D*)fsg->Get("Ev_max_nComp_ME4"); histssg.push_back(Ev_max_nComp_ME4_sg);
+  //Ev_max_nComp_ME4_mc = (TH1D*)fmc->Get("Ev_max_nComp_ME4"); histsmc.push_back(Ev_max_nComp_ME4_mc); 
+  //Ev_max_nWire_ME1_sg = (TH1D*)fsg->Get("Ev_max_nWire_ME1"); histssg.push_back(Ev_max_nWire_ME1_sg);
+  //Ev_max_nWire_ME1_mc = (TH1D*)fmc->Get("Ev_max_nWire_ME1"); histsmc.push_back(Ev_max_nWire_ME1_mc);
+  //Ev_max_nWire_ME2_sg = (TH1D*)fsg->Get("Ev_max_nWire_ME2"); histssg.push_back(Ev_max_nWire_ME2_sg);
+  //Ev_max_nWire_ME2_mc = (TH1D*)fmc->Get("Ev_max_nWire_ME2"); histsmc.push_back(Ev_max_nWire_ME2_mc);
+  //Ev_max_nWire_ME3_sg = (TH1D*)fsg->Get("Ev_max_nWire_ME3"); histssg.push_back(Ev_max_nWire_ME3_sg);
+  //Ev_max_nWire_ME3_mc = (TH1D*)fmc->Get("Ev_max_nWire_ME3"); histsmc.push_back(Ev_max_nWire_ME3_mc);
+  //Ev_max_nWire_ME4_sg = (TH1D*)fsg->Get("Ev_max_nWire_ME4"); histssg.push_back(Ev_max_nWire_ME4_sg);
+  //Ev_max_nWire_ME4_mc = (TH1D*)fmc->Get("Ev_max_nWire_ME4"); histsmc.push_back(Ev_max_nWire_ME4_mc);
   Ev_max_nComp_ME11_sg = (TH1D*)fsg->Get("Ev_max_nComp_ME11"); histssg.push_back(Ev_max_nComp_ME11_sg);
   Ev_max_nComp_ME11_mc = (TH1D*)fmc->Get("Ev_max_nComp_ME11"); histsmc.push_back(Ev_max_nComp_ME11_mc);
   Ev_max_nComp_ME12_sg = (TH1D*)fsg->Get("Ev_max_nComp_ME12"); histssg.push_back(Ev_max_nComp_ME12_sg);
   Ev_max_nComp_ME12_mc = (TH1D*)fmc->Get("Ev_max_nComp_ME12"); histsmc.push_back(Ev_max_nComp_ME12_mc);
+  Ev_max_nComp_ME13_sg = (TH1D*)fsg->Get("Ev_max_nComp_ME13"); histssg.push_back(Ev_max_nComp_ME13_sg);
+  Ev_max_nComp_ME13_mc = (TH1D*)fmc->Get("Ev_max_nComp_ME13"); histsmc.push_back(Ev_max_nComp_ME13_mc);
   Ev_max_nComp_ME21_sg = (TH1D*)fsg->Get("Ev_max_nComp_ME21"); histssg.push_back(Ev_max_nComp_ME21_sg);
   Ev_max_nComp_ME21_mc = (TH1D*)fmc->Get("Ev_max_nComp_ME21"); histsmc.push_back(Ev_max_nComp_ME21_mc);
   Ev_max_nComp_ME22_sg = (TH1D*)fsg->Get("Ev_max_nComp_ME22"); histssg.push_back(Ev_max_nComp_ME22_sg);
@@ -76,6 +78,8 @@ void comp_sig_mc()
   Ev_max_nWire_ME11_mc = (TH1D*)fmc->Get("Ev_max_nWire_ME11"); histsmc.push_back(Ev_max_nWire_ME11_mc);
   Ev_max_nWire_ME12_sg = (TH1D*)fsg->Get("Ev_max_nWire_ME12"); histssg.push_back(Ev_max_nWire_ME12_sg);
   Ev_max_nWire_ME12_mc = (TH1D*)fmc->Get("Ev_max_nWire_ME12"); histsmc.push_back(Ev_max_nWire_ME12_mc);
+  Ev_max_nWire_ME13_sg = (TH1D*)fsg->Get("Ev_max_nWire_ME13"); histssg.push_back(Ev_max_nWire_ME13_sg);
+  Ev_max_nWire_ME13_mc = (TH1D*)fmc->Get("Ev_max_nWire_ME13"); histsmc.push_back(Ev_max_nWire_ME13_mc);
   Ev_max_nWire_ME21_sg = (TH1D*)fsg->Get("Ev_max_nWire_ME21"); histssg.push_back(Ev_max_nWire_ME21_sg);
   Ev_max_nWire_ME21_mc = (TH1D*)fmc->Get("Ev_max_nWire_ME21"); histsmc.push_back(Ev_max_nWire_ME21_mc);
   Ev_max_nWire_ME22_sg = (TH1D*)fsg->Get("Ev_max_nWire_ME22"); histssg.push_back(Ev_max_nWire_ME22_sg);
