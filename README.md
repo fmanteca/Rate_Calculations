@@ -1,5 +1,15 @@
 # Rate_Calculations
 
+To start:
+
+1) cmsrel CMSSW_10_6_4
+
+2) cd CMSSW_10_6_4/src
+
+3) cmsenv
+
+4) git clone git@github.com:Nik-Menendez/Rate_Calculations.git
+
 Data and Signal MC is stored on Fermilab LPC machine at:
   - /uscms/home/menendez/nobackup/Trigger/CMSSW_10_6_4/src/Data/
 
