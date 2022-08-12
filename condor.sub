@@ -1,0 +1,8 @@
+universe    = vanilla
+executable  = make_trees.sh
+arguments   = $(myargs)
+output      = /dev/null
+error       = /dev/null
+log         = /dev/null
++JobFlavour = "espresso"
+queue myargs from file_args.txt
