@@ -32,13 +32,6 @@ if __name__ == '__main__':
     wire_ME41 = array('f', [0.])
     wire_ME42 = array('f', [0.])
 
-    # light file
-    #in_path = "/eos/cms/store/group/phys_smp/fernanpe/Eff_Rate/HTo2LongLivedTo4b_MH-350_MFF-160_CTau-1000mm_TuneCP5_14TeV_pythia8/crab_HTo2LongLivedTo4b_MH_350_MFF_160_CTau_1000mm_L1_ANA/220708_191825/0000/out_ana_muonshower_4.root"
-    
-    # light data file
-    #in_path = '/eos/cms/store/group/phys_smp/fernanpe/Eff_Rate/ZeroBias/crab_ZeroBias_Run2018D_L1_ANA/220708_112250/0001/out_ana_muonshower_1995.root'
-
-
     if 'ZeroBias' in args.in_path:
         out_path = "/eos/user/f/fernanpe/Rate_Calculations/trees/" + args.in_path.split('/')[12].replace('out','data_prodblock_' + args.in_path.split('/')[11])
     else:
@@ -88,7 +81,7 @@ if __name__ == '__main__':
         # Select MC events with at least one LLP in acceptance
         # Accomplished in about 2% of the cases according to branch gen_llp_in_acceptance
         # Selection: 0.9 < abs(eta) < 2.4, 568. < abs(vz) < 1100, xy radius < 695.5
-        if "MH" in in_path:
+        if "MH" in args.in_path:
             if len(clct.gen_llp_in_acceptance) == 1:
                 if(clct.gen_llp_in_acceptance[0] != 1):
                     continue
@@ -209,7 +202,7 @@ if __name__ == '__main__':
         # Select MC events with at least one LLP in acceptance
         # Accomplished in about 2% of the cases according to branch gen_llp_in_acceptance
         # Selection: 0.9 < abs(eta) < 2.4, 568. < abs(vz) < 1100, xy radius < 695.5
-        if "MH" in in_path:
+        if "MH" in args.in_path:
             if len(alct.gen_llp_in_acceptance) == 1:
                 if(alct.gen_llp_in_acceptance[0] != 1):
                     continue
