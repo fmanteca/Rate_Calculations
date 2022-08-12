@@ -86,9 +86,17 @@ if __name__ == '__main__':
         clct.GetEntry(i)
 
         # Select MC events with at least one LLP in acceptance
-        # Accomplished in 2% of the cases according to branch gen_llp_in_acceptance? TO BE ASKED
-        #if "MH" in in_path:
-        #    if clct.gen_llp_in_acceptance[0] != 1 and clct.gen_llp_in_acceptance[1] != 1
+        # Accomplished in about 2% of the cases according to branch gen_llp_in_acceptance
+        # Selection: 0.9 < abs(eta) < 2.4, 568. < abs(vz) < 1100, xy radius < 695.5
+        if "MH" in in_path:
+            if len(clct.gen_llp_in_acceptance) == 1:
+                if(clct.gen_llp_in_acceptance[0] != 1):
+                    continue
+            elif len(clct.gen_llp_in_acceptance) == 2:
+                if(clct.gen_llp_in_acceptance[0] != 1 and clct.gen_llp_in_acceptance[1] != 1):
+                    continue
+            else:
+                continue
 
         counter_nComp_posEndcap = np.zeros((5,4))
         counter_nComp_negEndcap = np.zeros((5,4))
@@ -198,6 +206,19 @@ if __name__ == '__main__':
     for i in tqdm(range(0, nEntries_alct)):
         alct.GetEntry(i)
     
+        # Select MC events with at least one LLP in acceptance
+        # Accomplished in about 2% of the cases according to branch gen_llp_in_acceptance
+        # Selection: 0.9 < abs(eta) < 2.4, 568. < abs(vz) < 1100, xy radius < 695.5
+        if "MH" in in_path:
+            if len(alct.gen_llp_in_acceptance) == 1:
+                if(alct.gen_llp_in_acceptance[0] != 1):
+                    continue
+            elif len(alct.gen_llp_in_acceptance) == 2:
+                if(alct.gen_llp_in_acceptance[0] != 1 and alct.gen_llp_in_acceptance[1] != 1):
+                    continue
+            else:
+                continue
+
         counter_nWire_posEndcap = np.zeros((5,4))
         counter_nWire_negEndcap = np.zeros((5,4))
         counter_nWire = np.zeros((5,4))
