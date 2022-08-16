@@ -33,9 +33,15 @@ if __name__ == '__main__':
     wire_ME42 = array('f', [0.])
 
     if 'ZeroBias' in args.in_path:
-        out_path = "/eos/user/f/fernanpe/Rate_Calculations/trees/" + args.in_path.split('/')[12].replace('out','data_prodblock_' + args.in_path.split('/')[11])
+        out_path = "/eos/user/f/fernanpe/Rate_Calculations/trees_Nik/" + args.in_path.split('/')[6]
     else:
-        out_path = "/eos/user/f/fernanpe/Rate_Calculations/trees/" + args.in_path.split('/')[12].replace('out','HTo2LongLivedTo4b_prodblock_' + args.in_path.split('/')[11] + '_' + args.in_path.split('/')[8].split('_')[1] + '_' + args.in_path.split('/')[8].split('_')[2] + '_' + args.in_path.split('/')[8].split('_')[3])
+        out_path = "/eos/user/f/fernanpe/Rate_Calculations/trees_Nik/" + args.in_path.split('/')[6]
+
+
+    # if 'ZeroBias' in args.in_path:
+    #     out_path = "/eos/user/f/fernanpe/Rate_Calculations/trees/" + args.in_path.split('/')[12].replace('out','data_prodblock_' + args.in_path.split('/')[11])
+    # else:
+    #     out_path = "/eos/user/f/fernanpe/Rate_Calculations/trees/" + args.in_path.split('/')[12].replace('out','HTo2LongLivedTo4b_prodblock_' + args.in_path.split('/')[11] + '_' + args.in_path.split('/')[8].split('_')[1] + '_' + args.in_path.split('/')[8].split('_')[2] + '_' + args.in_path.split('/')[8].split('_')[3])
 
     f = TFile( out_path, 'RECREATE' )
     comp_tree = TTree( 'comparator', 'Max Comparator digis in a single chamber in each ring per event' )
@@ -71,8 +77,8 @@ if __name__ == '__main__':
     nEntries_clct = clct.GetEntries()
     nEntries_alct = alct.GetEntries()
 
-    good_times = [6,7,8] # BX 7 is the nominal bunch crossing. BX 6 is -1 and 8 is +1                                                                                                                         
-
+    good_times_cathode = [6,7,8] # BX 7 is the nominal bunch crossing. BX 6 is -1 and 8 is +1                                                                                        
+    good_times_anode = [8]
 
     print("Starting CLCT Analysis")
     for i in tqdm(range(0, nEntries_clct)):
@@ -99,7 +105,7 @@ if __name__ == '__main__':
         for hit in range(len(clct.csc_comp_time)):
         
             # keep only in time hits
-            if clct.csc_comp_time[hit] not in good_times:
+            if clct.csc_comp_time[hit] not in good_times_cathode:
                 continue
             
             # ring number = 4 means ME1a, assuming that ME1a is an extension of ME1b. But they should be decoupled 
@@ -167,29 +173,16 @@ if __name__ == '__main__':
         # I will keep them by setting nMaxHits = 0 in all the chambers
         #if np.array_equal(counter_nComp, np.zeros((5,4))):
         #    continue
-    
-        # Get the maximum nHit value and its chamber (station and ring indexes)
-    
-        max_value = np.amax(counter_nComp)
-        max_station = np.where(counter_nComp == np.amax(counter_nComp))[0] #if repeated nhits, len(max_station) will be greater than 1
-        max_ring = np.where(counter_nComp == np.amax(counter_nComp))[1]
-
-        max_nComp = np.zeros((5,4))
-    
-        # It is possible that two different chambers have the same number of hits. In that case both nhits values are stored for both of them
-
-        for chamber in zip(max_station.tolist(), max_ring.tolist()):
-            max_nComp[chamber[0]][chamber[1]] = max_value
-        
-        comp_ME11[0] = max_nComp[1][1]
-        comp_ME12[0] = max_nComp[1][2]
-        comp_ME13[0] = max_nComp[1][3]
-        comp_ME21[0] = max_nComp[2][1]
-        comp_ME22[0] = max_nComp[2][2]
-        comp_ME31[0] = max_nComp[3][1]
-        comp_ME32[0] = max_nComp[3][2]
-        comp_ME41[0] = max_nComp[4][1]
-        comp_ME42[0] = max_nComp[4][2]
+            
+        comp_ME11[0] = counter_nComp[1][1]
+        comp_ME12[0] = counter_nComp[1][2]
+        comp_ME13[0] = counter_nComp[1][3]
+        comp_ME21[0] = counter_nComp[2][1]
+        comp_ME22[0] = counter_nComp[2][2]
+        comp_ME31[0] = counter_nComp[3][1]
+        comp_ME32[0] = counter_nComp[3][2]
+        comp_ME41[0] = counter_nComp[4][1]
+        comp_ME42[0] = counter_nComp[4][2]
     
         comp_tree.Fill()
 
@@ -220,7 +213,7 @@ if __name__ == '__main__':
         for hit in range(len(alct.csc_wire_time)):
         
             # keep only in time hits
-            if alct.csc_wire_time[hit] not in good_times:
+            if alct.csc_wire_time[hit] not in good_times_anode:
                 continue
             
             # ring number = 4 means ME1a, assuming that ME1a is an extension of ME1b. But they should be decoupled 
@@ -291,28 +284,16 @@ if __name__ == '__main__':
         #    continue
         
         # Get the maximum nHit value and its chamber (station and ring indexes)
-        
-        max_value = np.amax(counter_nWire)
-        max_station = np.where(counter_nWire == np.amax(counter_nWire))[0] #if repeated nhits, len(max_station) will be greater than 1
-        max_ring = np.where(counter_nWire == np.amax(counter_nWire))[1]
-        
-        max_nWire = np.zeros((5,4))
-    
-        # It is possible that two different chambers have the same number of hits. In that case both nhits values are stored for both of them
-
-        for chamber in zip(max_station.tolist(), max_ring.tolist()):
-            max_nWire[chamber[0]][chamber[1]] = max_value
-
-                    
-        wire_ME11[0] = max_nWire[1][1]
-        wire_ME12[0] = max_nWire[1][2]
-        wire_ME13[0] = max_nWire[1][3]
-        wire_ME21[0] = max_nWire[2][1]
-        wire_ME22[0] = max_nWire[2][2]
-        wire_ME31[0] = max_nWire[3][1]
-        wire_ME32[0] = max_nWire[3][2]
-        wire_ME41[0] = max_nWire[4][1]
-        wire_ME42[0] = max_nWire[4][2]
+                            
+        wire_ME11[0] = counter_nWire[1][1]
+        wire_ME12[0] = counter_nWire[1][2]
+        wire_ME13[0] = counter_nWire[1][3]
+        wire_ME21[0] = counter_nWire[2][1]
+        wire_ME22[0] = counter_nWire[2][2]
+        wire_ME31[0] = counter_nWire[3][1]
+        wire_ME32[0] = counter_nWire[3][2]
+        wire_ME41[0] = counter_nWire[4][1]
+        wire_ME42[0] = counter_nWire[4][2]
     
         wire_tree.Fill()
 
