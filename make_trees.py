@@ -33,15 +33,9 @@ if __name__ == '__main__':
     wire_ME42 = array('f', [0.])
 
     if 'ZeroBias' in args.in_path:
-        out_path = "/eos/user/f/fernanpe/Rate_Calculations/trees_Nik/" + args.in_path.split('/')[6]
+        out_path = "/eos/user/f/fernanpe/Rate_Calculations/trees/" + args.in_path.split('/')[12].replace('out','data_prodblock_' + args.in_path.split('/')[11])
     else:
-        out_path = "/eos/user/f/fernanpe/Rate_Calculations/trees_Nik/" + args.in_path.split('/')[6]
-
-
-    # if 'ZeroBias' in args.in_path:
-    #     out_path = "/eos/user/f/fernanpe/Rate_Calculations/trees/" + args.in_path.split('/')[12].replace('out','data_prodblock_' + args.in_path.split('/')[11])
-    # else:
-    #     out_path = "/eos/user/f/fernanpe/Rate_Calculations/trees/" + args.in_path.split('/')[12].replace('out','HTo2LongLivedTo4b_prodblock_' + args.in_path.split('/')[11] + '_' + args.in_path.split('/')[8].split('_')[1] + '_' + args.in_path.split('/')[8].split('_')[2] + '_' + args.in_path.split('/')[8].split('_')[3])
+        out_path = "/eos/user/f/fernanpe/Rate_Calculations/trees/" + args.in_path.split('/')[12].replace('out','HTo2LongLivedTo4b_prodblock_' + args.in_path.split('/')[11] + '_' + args.in_path.split('/')[8].split('_')[1] + '_' + args.in_path.split('/')[8].split('_')[2] + '_' + args.in_path.split('/')[8].split('_')[3])
 
     f = TFile( out_path, 'RECREATE' )
     comp_tree = TTree( 'comparator', 'Max Comparator digis in a single chamber in each ring per event' )
