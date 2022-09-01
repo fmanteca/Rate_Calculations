@@ -39,7 +39,7 @@ To launch the jobs:
 
     condor_submit condor.sub
 
-Once finisehd, merge the output files:
+Once finished, merge the output files:
 
     source doHadd.sh
 
@@ -64,6 +64,17 @@ Select background file in "F1" and select as many signal files as you'd like to 
 The program will create plots showing the distribution of max hits for each station/ring.
 
 ## Step 5: Compute efficiencies and rates
+
+    echo -e "Higgs Mass,LLP Mass,cTau,N in Acc,Loose,Nominal,Tight,2Loose,2Loose_or_1Nominal,2Loose_or_1Tight,2LooseDiffSectors_or_1Nominal,2LooseDiffSectors_or_1Tight" > Efficiency_output.txt 
+    python3 make_list_of_files_efficiencies.py
+    condor_submit condor_efficiencies.sub
+
+Once finished, build the fancy table:
+
+    python3 pretty_table.py > Efficiency_table.txt
+    cat Efficiency_table.txt
+
+Nik's version:
 
     git clone https://github.com/Nik-Menendez/LLPToHadronicShowers.git
     cd LLPToHadronicShowers
